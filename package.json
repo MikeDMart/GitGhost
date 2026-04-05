@@ -1,0 +1,28 @@
+{
+  "name": "git-ghost",
+  "version": "1.0.0",
+  "description": "Detecta archivos fantasma y crea PR automático",
+  "bin": {
+    "git-ghost": "bin/git-ghost.js"
+  },
+  "keywords": [
+    "git",
+    "cleaner",
+    "pr",
+    "audit"
+  ],
+  "author": "MikeDMart",
+  "license": "MIT",
+  "dependencies": {
+    "glob": "^10.3.10",
+    "simple-git": "^3.22.0"
+  },
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "commonjs"
+}
