@@ -1,5 +1,5 @@
 {
-  "name": "git-ghost",
+  "name": "@mikedmart1993/git-ghost",
   "version": "1.0.0",
   "description": "Detecta archivos fantasma y crea PR automático",
   "bin": {
@@ -14,8 +14,7 @@
   "author": "MikeDMart",
   "license": "MIT",
   "dependencies": {
-    "glob": "^10.3.10",
-    "simple-git": "^3.22.0"
+    "glob": "^10.3.10"
   },
   "main": "index.js",
   "directories": {
