@@ -1,5 +1,5 @@
 {
-  "name": "@mikedmart1993/git-ghost",
+  "name": "@mikedmart93/git-ghost",
   "version": "1.0.0",
   "description": "Detecta archivos fantasma y crea PR automático",
   "bin": {
