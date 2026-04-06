@@ -1,246 +1,318 @@
 # 👻 GitGhost
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MikeDMart/GitGhost/main/assets/logo.png" alt="GitGhost Logo" width="200">
+  <img src="https://raw.githubusercontent.com/MikeDMart/GitGhost/main/assets/logo.png" alt="GitGhost Logo" width="180">
 </p>
 
 <p align="center">
-  <strong>🚀 Detecta archivos fantasma, duplicados y dependencias huérfanas automáticamente</strong>
+  <strong>Automatically detect duplicate files, orphaned images, and dead dependencies — then ship a clean PR.</strong>
 </p>
 
 <p align="center">
-  <a href="#instalación"><img src="https://img.shields.io/badge/📦-Instalar-blue?style=for-the-badge"></a>
-  <a href="#uso"><img src="https://img.shields.io/badge/🎯-Usar-green?style=for-the-badge"></a>
-  <a href="#comandos"><img src="https://img.shields.io/badge/⚡-Comandos-orange?style=for-the-badge"></a>
-  <a href="#ejemplos"><img src="https://img.shields.io/badge/💡-Ejemplos-purple?style=for-the-badge"></a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/versión-1.0.0-blue">
-  <img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen">
-  <img src="https://img.shields.io/badge/licencia-MIT-green">
-  <img src="https://img.shields.io/badge/PRs-bienvenidos-brightgreen">
+  <img src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square">
+  <img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen?style=flat-square">
+  <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square">
+  <img src="https://img.shields.io/npm/dm/@mikedmart93/git-ghost?style=flat-square">
 </p>
 
 ---
 
-## 📋 Tabla de Contenidos
+## What is GitGhost?
 
-- [✨ Características](#-características)
-- [🚀 Instalación](#-instalación)
-- [🎯 Uso Rápido](#-uso-rápido)
-- [📚 Comandos](#-comandos)
-- [💡 Ejemplos](#-ejemplos)
-- [🔄 Flujo de Trabajo](#-flujo-de-trabajo)
-- [🛠️ Tecnologías](#️-tecnologías)
-- [🤝 Contribuir](#-contribuir)
-- [📄 Licencia](#-licencia)
-- [👤 Autor](#-autor)
+GitGhost is a zero-config CLI tool that audits your repository for things that shouldn't be there — duplicate files, images nobody references, and npm packages nobody imports. When it finds them, it opens a Pull Request with everything cleaned up, so your team can review before anything gets deleted for good.
+
+Nothing is permanently removed without your approval. Ghost files move to `.ghost/` for safe recovery. Duplicates stay in place until the PR is merged. Your repo stays clean without the risk.
 
 ---
 
-## ✨ Características
+## Features
 
-| Feature | Descripción | Estado |
-|---------|-------------|--------|
-| 🔍 **Detección de duplicados** | Encuentra archivos con contenido idéntico | ✅ |
-| 🖼️ **Imágenes huérfanas** | Detecta imágenes no referenciadas en HTML/CSS/JS | ✅ |
-| 📦 **Dependencias muertas** | Identifica paquetes npm instalados pero no usados | ✅ |
-| 🌿 **Branch automática** | Crea una branch limpia con las correcciones | ✅ |
-| 📬 **PR automático** | Genera Pull Request en GitHub | ✅ |
-| ♻️ **Restauración** | Recupera archivos desde `.ghost/` | ✅ |
-| 📊 **Historial** | Muestra todas las limpiezas realizadas | ✅ |
-| 🚀 **Modo CI/CD** | Integración con GitHub Actions | 🚧 Próximamente |
+| | Feature | Description |
+|---|---|---|
+| 🔍 | **Duplicate detection** | Finds files with identical content using MD5 hashing |
+| 🖼️ | **Orphaned images** | Detects images not referenced in any HTML, CSS, or JS file |
+| 📦 | **Dead dependencies** | Identifies npm packages installed but never imported |
+| 🌿 | **Auto branch** | Creates a timestamped cleanup branch automatically |
+| 📬 | **Auto PR** | Opens a Pull Request on GitHub via the `gh` CLI |
+| ♻️ | **Safe restore** | Recovers any file moved to `.ghost/` with one command |
+| 📊 | **History** | Shows a log of every cleanup ever run on the repo |
+| 🚀 | **CI/CD mode** | GitHub Actions integration *(coming soon)* |
 
 ---
 
-## 🚀 Instalación
+## Installation
 
-### Opción 1: npm (recomendado)
-
+**Via npm (recommended)**
 ```bash
-npm install -g git-ghost
-Opción 2: Desde GitHub
-bash
+npm install -g @mikedmart93/git-ghost
+```
+
+**Via GitHub**
+```bash
 git clone https://github.com/MikeDMart/GitGhost.git
 cd GitGhost
 npm link
-Opción 3: Ejecución directa (sin instalar)
-bash
-npx github:MikeDMart/GitGhost audit
-Verificar instalación
-bash
-git-ghost --version
-# Output: git-ghost v1.0.0
-🎯 Uso Rápido
-bash
-# 1. Entra a tu repositorio
-cd /ruta/de/tu/proyecto
+```
 
-# 2. Audita (solo lectura, sin cambios)
+**Without installing**
+```bash
+npx github:MikeDMart/GitGhost audit
+```
+
+**Verify**
+```bash
+git-ghost --version
+# git-ghost v1.0.0
+```
+
+> **Requires** [GitHub CLI (`gh`)](https://cli.github.com/) for the `--pr` flag. Install it and run `gh auth login` once.
+
+---
+
+## Quick Start
+
+```bash
+# Step into your project
+cd /path/to/your/repo
+
+# See what's haunting it (read-only, nothing changes)
 git-ghost audit
 
-# 3. Limpia automáticamente
+# Fix everything and open a PR for review
 git-ghost fix --pr
+```
 
-# 4. Revisa el PR en GitHub
-# 5. Aprueba y mergea
-📚 Comandos
-Comando	Descripción	Ejemplo
-git-ghost audit	Analiza y reporta problemas	git-ghost audit
-git-ghost fix	Crea branch local con correcciones	git-ghost fix
-git-ghost fix --pr	Crea branch + Pull Request	git-ghost fix --pr
-git-ghost restore <file>	Restaura archivo desde .ghost/	git-ghost restore styles/old.css
-git-ghost history	Muestra historial de limpiezas	git-ghost history
-git-ghost help	Muestra ayuda	git-ghost help
-💡 Ejemplos
-Ejemplo 1: Auditoría básica
-bash
-$ cd ~/Projects/mi-app
+That's it. Review the PR, restore anything you want back, merge when ready.
+
+---
+
+## Commands
+
+| Command | Description |
+|---|---|
+| `git-ghost audit` | Scan and report — no changes made |
+| `git-ghost fix` | Apply fixes on a new local branch |
+| `git-ghost fix --pr` | Apply fixes and open a GitHub Pull Request |
+| `git-ghost restore <file>` | Recover a file from `.ghost/` |
+| `git-ghost history` | Show all previous cleanup commits |
+| `git-ghost help` | Show usage information |
+
+---
+
+## How it works
+
+### Audit
+
+GitGhost scans your working directory and reports three categories of findings:
+
+**Duplicate files** — reads every `.js`, `.css`, `.html`, `.json`, and `.md` file, hashes the content with MD5, and flags any file whose hash matches another. The first occurrence is kept; duplicates are marked for removal.
+
+**Orphaned images** — finds every `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, and `.webp` file, then checks whether its filename or path appears anywhere in your source code. If nothing references it, it's a ghost.
+
+**Dead dependencies** — reads `dependencies` and `devDependencies` from `package.json` and checks whether each package name appears in a `require()` or `import` statement anywhere in your JS/TS files. If it doesn't, it's flagged.
+
+### Fix
+
+When you run `git-ghost fix`:
+
+1. Creates a branch named `fix/git-ghost-<timestamp>`
+2. Moves orphaned images to `.ghost/` (preserving directory structure)
+3. Deletes confirmed duplicate files (keeping the first occurrence)
+4. Commits all changes with a detailed message
+5. Pushes the branch to origin
+6. Optionally opens a Pull Request with a review checklist
+
+Nothing in `.ghost/` is deleted — it's a quarantine folder, not a trash can.
+
+---
+
+## Examples
+
+### Basic audit
+
+```
 $ git-ghost audit
 
 👻 git-ghost audit
 ================================
 
-📁 ARCHIVOS DUPLICADOS:
+📁 DUPLICATE FILES:
   📄 styles/main.css
-     idéntico a: styles/style.css
+     identical to: styles/style.css
   📄 utils/helpers.js
-     idéntico a: lib/utils.js
+     identical to: lib/utils.js
 
-🖼️ IMÁGENES NO REFERENCIADAS:
+🖼️  UNREFERENCED IMAGES:
   📄 assets/old-logo.png
   📄 images/backup/banner.jpg
 
-📦 DEPENDENCIAS HUÉRFANAS:
+📦 ORPHANED DEPENDENCIES:
   📦 lodash
   📦 moment
 
-💡 Sugerencia:
-  Ejecuta git-ghost fix --pr para crear un PR con correcciones
-Ejemplo 2: Limpieza automática con PR
-bash
+💡 Tip:
+  Run git-ghost fix --pr to open a PR with all fixes applied
+```
+
+### Automated cleanup with PR
+
+```
 $ git-ghost fix --pr
 
 👻 git-ghost fix
 ================================
 
-📊 Ejecutando auditoría...
+📊 Running audit...
 
-📋 Resumen de correcciones:
-  🗑️ Duplicados: 2
-  👻 Imágenes no usadas: 2
-  📦 Dependencias huérfanas: 2
+📋 Fix summary:
+  🗑️  Duplicates:            2
+  👻 Unreferenced images:   2
+  📦 Orphaned dependencies: 2
 
-🌿 Creando branch: fix/git-ghost-1743872154321
+🌿 Creating branch: fix/git-ghost-1743872154321
 
-🔧 Aplicando correcciones...
-  🗑️ Eliminado: styles/main.css
-  🗑️ Eliminado: utils/helpers.js
+🔧 Applying fixes...
   👻 assets/old-logo.png → .ghost/assets/old-logo.png
   👻 images/backup/banner.jpg → .ghost/images/backup/banner.jpg
-  📦 Desinstalando lodash
-  📦 Desinstalando moment
+  🗑️  Removed: styles/main.css
+  🗑️  Removed: utils/helpers.js
 
-📝 Creando commit...
-📤 Subiendo branch...
-📬 Pull Request creado: https://github.com/usuario/mi-app/pull/123
+📝 Creating commit...
+📤 Pushing branch...
+📬 Pull Request created: https://github.com/username/my-app/pull/123
 
-✅ Branch creada: fix/git-ghost-1743872154321
-Ejemplo 3: Restaurar un archivo
-bash
+✅ Branch ready: fix/git-ghost-1743872154321
+```
+
+### Restoring a file
+
+```
 $ git-ghost restore assets/old-logo.png
 
 👻 git-ghost restore
 ================================
 
-✅ Restaurado: assets/old-logo.png
+✅ Restored: assets/old-logo.png
 
-💡 Para guardar la restauración:
+💡 To commit the restoration:
   git add assets/old-logo.png
-  git commit -m "restore: recuperar assets/old-logo.png"
-Ejemplo 4: Ver historial
-bash
+  git commit -m "restore: recover assets/old-logo.png"
+```
+
+### Viewing history
+
+```
 $ git-ghost history
 
 👻 git-ghost history
 ================================
 
-📋 Limpiezas anteriores:
+📋 Previous cleanups:
 
-4a3c235 2026-04-05 chore: eliminar dependencia simple-git no utilizada
+4a3c235 2026-04-05 chore: automated cleanup via git-ghost
 2778562 2026-04-05 feat: v1 git-ghost
-3f2a1b4 2026-04-04 chore: limpieza automática con git-ghost
+3f2a1b4 2026-04-04 chore: remove unused dependency simple-git
 
-👻 Archivos en .ghost/ actualmente: 21
-💡 Para restaurar: git-ghost restore <archivo>
-🔄 Flujo de Trabajo
-Para un repositorio limpio
+👻 Files currently in .ghost/: 21
+💡 To restore: git-ghost restore <file>
+```
 
+---
 
+## Project structure
 
+```
+GitGhost/
+├── bin/
+│   └── git-ghost.js      # CLI entry point
+├── lib/
+│   ├── audit.js          # Scan and report
+│   ├── fix.js            # Apply fixes and create PR
+│   ├── restore.js        # Recover files from .ghost/
+│   ├── history.js        # Show cleanup log
+│   └── utils.js          # File scanning and hashing logic
+├── .gitignore
+├── package.json
+└── README.md
+```
 
+---
 
+## Workflow
 
+```
+your repo
+    │
+    ▼
+git-ghost audit          ← read-only scan, nothing changes
+    │
+    ▼
+git-ghost fix --pr       ← branch created, fixes applied, PR opened
+    │
+    ▼
+review PR on GitHub      ← check what was removed, restore if needed
+    │
+    ▼
+merge                    ← repo is clean
+```
 
+If anything was removed by mistake:
 
+```
+git-ghost restore <file>    ← pulls it back from .ghost/
+git add <file>
+git commit -m "restore: recover <file>"
+```
 
-Para recuperar archivos
+---
 
+## Tech stack
 
+- **Node.js** — runtime
+- **glob** — recursive file pattern matching
+- **crypto** — MD5 hashing for duplicate detection
+- **child_process** — git and gh CLI integration
+- **fs / path** — file operations and ghost quarantine
 
+---
 
-🛠️ Tecnologías
-Node.js - Runtime JavaScript
+## Contributing
 
-ShellJS - Ejecución de comandos Git
+Contributions are welcome. Here's how:
 
-Glob - Búsqueda de archivos
+```bash
+# Fork the repo, then:
+git checkout -b feature/your-feature
+git commit -m 'feat: describe your change'
+git push origin feature/your-feature
+# Open a Pull Request
+```
 
-GitHub CLI - Creación de Pull Requests
+Found a bug? Open an issue in the [issue tracker](https://github.com/MikeDMart/GitGhost/issues).
 
-🤝 Contribuir
-¡Las contribuciones son bienvenidas!
+---
 
-Fork el proyecto
+## Roadmap
 
-Crea tu rama: git checkout -b feature/nueva-funcion
+- [ ] Support for more file types (PDF, DOC, SVG sprites)
+- [ ] GitHub Actions integration for automated CI runs
+- [ ] HTML audit reports
+- [ ] GitLab and Bitbucket support
+- [ ] Config file (`.ghostrc`) for custom ignore patterns
 
-Commit: git commit -m 'feat: agregar nueva funcion'
+---
 
-Push: git push origin feature/nueva-funcion
+## License
 
-Abre un Pull Request
+MIT © [MikeDMart](https://github.com/MikeDMart)
 
-Reportar bugs
-Usa el issue tracker
+---
 
-📄 Licencia
-MIT © MikeDMart
-
-👤 Autor
-MikeDMart
-
-GitHub: @MikeDMart
-
-npm: @mikedmart
-
-🙏 Agradecimientos
-A todos los que usan y contribuyen a GitGhost
-
-A la comunidad open source
-
-📊 Estadísticas
-<p align="center"> <img src="https://img.shields.io/github/stars/MikeDMart/GitGhost?style=social"> <img src="https://img.shields.io/github/forks/MikeDMart/GitGhost?style=social"> <img src="https://img.shields.io/npm/dm/@mikedmart/git-ghost"> <img src="https://img.shields.io/github/last-commit/MikeDMart/GitGhost"> </p>
-🎯 Roadmap
-Soporte para más tipos de archivos (PDF, DOC, etc.)
-
-Integración con GitHub Actions
-
-Modo CI/CD automático
-
-Reportes HTML
-
-Soporte para GitLab y Bitbucket
-
-<p align="center"> <strong>Hecho con ❤️ para mantener repositorios limpios</strong> </p><p align="center"> <a href="https://github.com/MikeDMart/GitGhost">⭐ Dale una estrella en GitHub</a> </p> ```
+<p align="center">
+  <a href="https://github.com/MikeDMart/GitGhost">⭐ Star on GitHub</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/MikeDMart/GitGhost/issues">🐛 Report a bug</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/MikeDMart/GitGhost/issues">💡 Request a feature</a>
+</p>
