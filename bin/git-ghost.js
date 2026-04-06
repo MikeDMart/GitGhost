@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 const { execSync } = require('child_process');
-const path = require('path');
 
-// Colores
 const colors = {
     red: '\x1b[31m',
     green: '\x1b[32m',
@@ -15,19 +13,19 @@ const colors = {
 
 const command = process.argv[2];
 
-// Mostrar ayuda si no hay comando
 if (!command || command === 'help' || command === '--help') {
     console.log(`
 ${colors.blue}git-ghost v1.0.0${colors.reset}
-${colors.gray}Herramienta de limpieza de repositorios${colors.reset}
+${colors.gray}Repository cleanup tool${colors.reset}
 
-${colors.yellow}Uso:${colors.reset}
-  git-ghost audit               # Solo detecta problemas (modo lectura)
-  git-ghost fix --pr            # Crea PR con correcciones
-  git-ghost restore <archivo>   # Restaura desde .ghost/
-  git-ghost history             # Muestra historial de limpiezas
+${colors.yellow}Usage:${colors.reset}
+  git-ghost audit               # Detect issues (read-only, no changes)
+  git-ghost fix                 # Create local branch with fixes
+  git-ghost fix --pr            # Create branch + Pull Request
+  git-ghost restore <file>      # Restore a file from .ghost/
+  git-ghost history             # Show cleanup history
 
-${colors.yellow}Ejemplos:${colors.reset}
+${colors.yellow}Examples:${colors.reset}
   git-ghost audit
   git-ghost fix --pr
   git-ghost restore styles/old.css
@@ -35,15 +33,13 @@ ${colors.yellow}Ejemplos:${colors.reset}
     process.exit(0);
 }
 
-// Verificar que estamos en un repositorio Git
 try {
     execSync('git rev-parse --git-dir', { stdio: 'ignore' });
 } catch {
-    console.log(`${colors.red}❌ No estás en un repositorio Git${colors.reset}`);
+    console.log(`${colors.red}❌ Not inside a Git repository${colors.reset}`);
     process.exit(1);
 }
 
-// Ejecutar comando
 switch (command) {
     case 'audit':
         require('../lib/audit')();
@@ -60,7 +56,7 @@ switch (command) {
         require('../lib/history')();
         break;
     default:
-        console.log(`${colors.red}❌ Comando no reconocido: ${command}${colors.reset}`);
-        console.log(`Ejecuta 'git-ghost help' para ver comandos disponibles`);
+        console.log(`${colors.red}❌ Unknown command: ${command}${colors.reset}`);
+        console.log(`Run 'git-ghost help' to see available commands`);
         process.exit(1);
 }
