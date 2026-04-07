@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen?style=flat-square">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square">
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square">
-  <img src="https://img.shields.io/npm/dm/@mikedmart93/git-ghost?style=flat-square">
+  <img src="https://img.shields.io/npm/dm/@homelab/git-ghost?style=flat-square">
 </p>
 
 ---
@@ -45,34 +45,26 @@ Nothing is permanently removed without your approval. Ghost files move to `.ghos
 
 **Via npm (recommended)**
 ```bash
-npm install -g @mikedmart93/git-ghost
-```
+npm install -g @homelab/git-ghost
+Via GitHub
 
-**Via GitHub**
-```bash
+bash
 git clone https://github.com/MikeDMart/GitGhost.git
 cd GitGhost
 npm link
-```
+Without installing
 
-**Without installing**
-```bash
+bash
 npx github:MikeDMart/GitGhost audit
-```
+Verify
 
-**Verify**
-```bash
+bash
 git-ghost --version
 # git-ghost v1.0.0
-```
+Requires GitHub CLI (gh) for the --pr flag. Install it and run gh auth login once.
 
-> **Requires** [GitHub CLI (`gh`)](https://cli.github.com/) for the `--pr` flag. Install it and run `gh auth login` once.
-
----
-
-## Quick Start
-
-```bash
+Quick Start
+bash
 # Step into your project
 cd /path/to/your/repo
 
@@ -81,57 +73,46 @@ git-ghost audit
 
 # Fix everything and open a PR for review
 git-ghost fix --pr
-```
-
 That's it. Review the PR, restore anything you want back, merge when ready.
 
----
-
-## Commands
-
-| Command | Description |
-|---|---|
-| `git-ghost audit` | Scan and report — no changes made |
-| `git-ghost fix` | Apply fixes on a new local branch |
-| `git-ghost fix --pr` | Apply fixes and open a GitHub Pull Request |
-| `git-ghost restore <file>` | Recover a file from `.ghost/` |
-| `git-ghost history` | Show all previous cleanup commits |
-| `git-ghost help` | Show usage information |
-
----
-
-## How it works
-
-### Audit
-
+Commands
+Command	Description
+git-ghost audit	Scan and report — no changes made
+git-ghost fix	Apply fixes on a new local branch
+git-ghost fix --pr	Apply fixes and open a GitHub Pull Request
+git-ghost restore <file>	Recover a file from .ghost/
+git-ghost history	Show all previous cleanup commits
+git-ghost help	Show usage information
+How it works
+Audit
 GitGhost scans your working directory and reports three categories of findings:
 
-**Duplicate files** — reads every `.js`, `.css`, `.html`, `.json`, and `.md` file, hashes the content with MD5, and flags any file whose hash matches another. The first occurrence is kept; duplicates are marked for removal.
+Duplicate files — reads every .js, .css, .html, .json, and .md file, hashes the content with MD5, and flags any file whose hash matches another. The first occurrence is kept; duplicates are marked for removal.
 
-**Orphaned images** — finds every `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, and `.webp` file, then checks whether its filename or path appears anywhere in your source code. If nothing references it, it's a ghost.
+Orphaned images — finds every .png, .jpg, .jpeg, .gif, .svg, and .webp file, then checks whether its filename or path appears anywhere in your source code. If nothing references it, it's a ghost.
 
-**Dead dependencies** — reads `dependencies` and `devDependencies` from `package.json` and checks whether each package name appears in a `require()` or `import` statement anywhere in your JS/TS files. If it doesn't, it's flagged.
+Dead dependencies — reads dependencies and devDependencies from package.json and checks whether each package name appears in a require() or import statement anywhere in your JS/TS files. If it doesn't, it's flagged.
 
-### Fix
+Fix
+When you run git-ghost fix:
 
-When you run `git-ghost fix`:
+Creates a branch named fix/git-ghost-<timestamp>
 
-1. Creates a branch named `fix/git-ghost-<timestamp>`
-2. Moves orphaned images to `.ghost/` (preserving directory structure)
-3. Deletes confirmed duplicate files (keeping the first occurrence)
-4. Commits all changes with a detailed message
-5. Pushes the branch to origin
-6. Optionally opens a Pull Request with a review checklist
+Moves orphaned images to .ghost/ (preserving directory structure)
 
-Nothing in `.ghost/` is deleted — it's a quarantine folder, not a trash can.
+Deletes confirmed duplicate files (keeping the first occurrence)
 
----
+Commits all changes with a detailed message
 
-## Examples
+Pushes the branch to origin
 
-### Basic audit
+Optionally opens a Pull Request with a review checklist
 
-```
+Nothing in .ghost/ is deleted — it's a quarantine folder, not a trash can.
+
+Examples
+Basic audit
+text
 $ git-ghost audit
 
 👻 git-ghost audit
@@ -153,11 +134,8 @@ $ git-ghost audit
 
 💡 Tip:
   Run git-ghost fix --pr to open a PR with all fixes applied
-```
-
-### Automated cleanup with PR
-
-```
+Automated cleanup with PR
+text
 $ git-ghost fix --pr
 
 👻 git-ghost fix
@@ -183,11 +161,8 @@ $ git-ghost fix --pr
 📬 Pull Request created: https://github.com/username/my-app/pull/123
 
 ✅ Branch ready: fix/git-ghost-1743872154321
-```
-
-### Restoring a file
-
-```
+Restoring a file
+text
 $ git-ghost restore assets/old-logo.png
 
 👻 git-ghost restore
@@ -198,11 +173,8 @@ $ git-ghost restore assets/old-logo.png
 💡 To commit the restoration:
   git add assets/old-logo.png
   git commit -m "restore: recover assets/old-logo.png"
-```
-
-### Viewing history
-
-```
+Viewing history
+text
 $ git-ghost history
 
 👻 git-ghost history
@@ -216,13 +188,8 @@ $ git-ghost history
 
 👻 Files currently in .ghost/: 21
 💡 To restore: git-ghost restore <file>
-```
-
----
-
-## Project structure
-
-```
+Project structure
+text
 GitGhost/
 ├── bin/
 │   └── git-ghost.js      # CLI entry point
@@ -235,13 +202,8 @@ GitGhost/
 ├── .gitignore
 ├── package.json
 └── README.md
-```
-
----
-
-## Workflow
-
-```
+Workflow
+text
 your repo
     │
     ▼
@@ -255,64 +217,46 @@ review PR on GitHub      ← check what was removed, restore if needed
     │
     ▼
 merge                    ← repo is clean
-```
-
 If anything was removed by mistake:
 
-```
+text
 git-ghost restore <file>    ← pulls it back from .ghost/
 git add <file>
 git commit -m "restore: recover <file>"
-```
+Tech stack
+Node.js — runtime
 
----
+glob — recursive file pattern matching
 
-## Tech stack
+crypto — MD5 hashing for duplicate detection
 
-- **Node.js** — runtime
-- **glob** — recursive file pattern matching
-- **crypto** — MD5 hashing for duplicate detection
-- **child_process** — git and gh CLI integration
-- **fs / path** — file operations and ghost quarantine
+child_process — git and gh CLI integration
 
----
+fs / path — file operations and ghost quarantine
 
-## Contributing
-
+Contributing
 Contributions are welcome. Here's how:
 
-```bash
+bash
 # Fork the repo, then:
 git checkout -b feature/your-feature
 git commit -m 'feat: describe your change'
 git push origin feature/your-feature
 # Open a Pull Request
-```
+Found a bug? Open an issue in the issue tracker.
 
-Found a bug? Open an issue in the [issue tracker](https://github.com/MikeDMart/GitGhost/issues).
+Roadmap
+Support for more file types (PDF, DOC, SVG sprites)
 
----
+GitHub Actions integration for automated CI runs
 
-## Roadmap
+HTML audit reports
 
-- [ ] Support for more file types (PDF, DOC, SVG sprites)
-- [ ] GitHub Actions integration for automated CI runs
-- [ ] HTML audit reports
-- [ ] GitLab and Bitbucket support
-- [ ] Config file (`.ghostrc`) for custom ignore patterns
+GitLab and Bitbucket support
 
----
+Config file (.ghostrc) for custom ignore patterns
 
-## License
+License
+MIT © MikeDMart
 
-MIT © [MikeDMart](https://github.com/MikeDMart)
-
----
-
-<p align="center">
-  <a href="https://github.com/MikeDMart/GitGhost">⭐ Star on GitHub</a>
-  &nbsp;·&nbsp;
-  <a href="https://github.com/MikeDMart/GitGhost/issues">🐛 Report a bug</a>
-  &nbsp;·&nbsp;
-  <a href="https://github.com/MikeDMart/GitGhost/issues">💡 Request a feature</a>
-</p>
+<p align="center"> <a href="https://github.com/MikeDMart/GitGhost">⭐ Star on GitHub</a> &nbsp;·&nbsp; <a href="https://github.com/MikeDMart/GitGhost/issues">🐛 Report a bug</a> &nbsp;·&nbsp; <a href="https://github.com/MikeDMart/GitGhost/issues">💡 Request a feature</a> </p> ```
