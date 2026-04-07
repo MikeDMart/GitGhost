@@ -1,8 +1,9 @@
 name: Publish to npm and GitHub Packages
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - 'v*'  # Se activa cuando pusheas un tag v1.0.2
 
 jobs:
   publish-npm:
