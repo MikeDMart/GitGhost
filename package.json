@@ -1,5 +1,5 @@
 {
-  "name": "@homelab.org/git-ghost",
+  "name": "@homelab/git-ghost",
   "version": "1.0.9",
   "description": "Detects ghost files, duplicates, and orphaned dependencies — and opens a PR to clean them up",
   "bin": {
